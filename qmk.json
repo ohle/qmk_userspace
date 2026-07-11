@@ -200,6 +200,30 @@
                 "HLC_NONE": "1",
                 "TARGET": "splitkb_halcyon_ferris_rev1_vial_hlc"
             }
+        ],
+        [
+            "splitkb/halcyon/kyria/rev4",
+            "ohle",
+            {
+                "HLC_TFT_DISPLAY": "1",
+                "TARGET": "splitkb_halcyon_kyria_rev4_ohle_display"
+            }
+        ],
+        [
+            "splitkb/halcyon/kyria/rev4",
+            "ohle",
+            {
+                "HLC_CIRQUE_TRACKPAD": "1",
+                "TARGET": "splitkb_halcyon_kyria_rev4_ohle_cirque_trackpad"
+            }
+        ],
+        [
+            "splitkb/halcyon/kyria/rev4",
+            "ohle",
+            {
+                "HLC_NONE": "1",
+                "TARGET": "splitkb_halcyon_kyria_rev4_ohle"
+            }
         ]
     ]
 }
