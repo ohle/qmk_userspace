@@ -13,6 +13,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                                                        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS
     ),
 };
+
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [0] = {
+        ENCODER_CCW_CW(_______, _______),
+        ENCODER_CCW_CW(_______, _______),
+        ENCODER_CCW_CW(_______, _______),
+        ENCODER_CCW_CW(_______, _______),
+    },
+};
+#endif
 // clang-format on
 
 // Solarized palette: layer 0 = off, layers 1-5 = blue/cyan/orange/green/violet
