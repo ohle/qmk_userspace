@@ -2,6 +2,25 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H
+#include "hlc_tft_display/hlc_tft_display.h"
+#include "graphics/fonts/unifont_80.qff.h"
+
+#ifdef HLC_TFT_DISPLAY
+// Fonts mono2
+#include "hlc_tft_display/graphics/fonts/Retron2000-27.qff.h"
+#include "hlc_tft_display/graphics/fonts/Retron2000-underline-27.qff.h"
+
+static const char *caps =        "Caps";
+static const char *num =         "Num";
+static const char *scroll =      "Scroll";
+
+static painter_font_handle_t Retron27;
+static painter_font_handle_t Retron27_underline;
+static painter_font_handle_t unifont_80;
+
+static led_t last_led_usb_state = {0};
+static layer_state_t last_layer_state = {0};
+#endif
 
 enum layers {
     _QWERTY = 0,
@@ -126,3 +145,68 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     return false;
 }
+
+#ifdef HLC_TFT_DISPLAY
+bool display_module_housekeeping_task_user(bool second_display) {
+    static bool first_run_led = false;
+    static bool first_run_layer = false;
+
+    if( first_run_layer == false) {
+        // Load fonts
+        Retron27 = qp_load_font_mem(font_Retron2000_27);
+        Retron27_underline = qp_load_font_mem(font_Retron2000_underline_27);
+        unifont_80 = qp_load_font_mem(font_unifont_80);
+    }
+
+    if(last_led_usb_state.raw != host_keyboard_led_state().raw || first_run_led == false) {
+        led_t led_usb_state = host_keyboard_led_state();
+
+        led_usb_state.caps_lock   ? qp_drawtext_recolor(lcd_surface, 5, LCD_HEIGHT - Retron27->line_height * 3 - 15, Retron27_underline, caps,   HSV_CAPS_ON,   HSV_BLACK) : qp_drawtext_recolor(lcd_surface, 5, LCD_HEIGHT - Retron27->line_height * 3 - 15, Retron27, caps,   HSV_CAPS_OFF,   HSV_BLACK);
+        led_usb_state.num_lock    ? qp_drawtext_recolor(lcd_surface, 5, LCD_HEIGHT - Retron27->line_height * 2 - 10, Retron27_underline, num,    HSV_NUM_ON,    HSV_BLACK) : qp_drawtext_recolor(lcd_surface, 5, LCD_HEIGHT - Retron27->line_height * 2 - 10, Retron27, num,    HSV_NUM_OFF,    HSV_BLACK);
+        led_usb_state.scroll_lock ? qp_drawtext_recolor(lcd_surface, 5, LCD_HEIGHT - Retron27->line_height - 5,      Retron27_underline, scroll, HSV_SCROLL_ON, HSV_BLACK) : qp_drawtext_recolor(lcd_surface, 5, LCD_HEIGHT - Retron27->line_height - 5,      Retron27, scroll, HSV_SCROLL_OFF, HSV_BLACK);
+
+        last_led_usb_state = led_usb_state;
+        first_run_led = true;
+    }
+
+    if(last_layer_state != layer_state || first_run_layer == false) {
+        switch (get_highest_layer(layer_state|default_layer_state)) {
+        case 0:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "a", HSV_LAYER_0 , HSV_BLACK);
+            break;
+        case 1:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "1", HSV_LAYER_1 , HSV_BLACK);
+            break;
+        case 2:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "&", HSV_LAYER_2 , HSV_BLACK);
+            break;
+        case 3:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "F", HSV_LAYER_3 , HSV_BLACK);
+            break;
+        case 4:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "↕", HSV_LAYER_4 , HSV_BLACK);
+            break;
+        case 5:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "@", HSV_LAYER_5 , HSV_BLACK);
+            break;
+        case 6:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "#", HSV_LAYER_6 , HSV_BLACK);
+            break;
+        case 7:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "#", HSV_LAYER_6 , HSV_BLACK);
+            break;
+        default:
+            qp_drawtext_recolor(lcd_surface, 5, 5, unifont_80, "a", HSV_LAYER_0 , HSV_BLACK);
+        }
+        last_layer_state = layer_state;
+        first_run_layer = true;
+    }
+    // Move surface to lcd
+    qp_surface_draw(lcd_surface, lcd, 0, 0, 0);
+    qp_flush(lcd);
+    
+    // Return false on the main display so the module's default numeric layer
+    // renderer does not run and overwrite these custom glyphs.
+    return second_display;
+}
+#endif
