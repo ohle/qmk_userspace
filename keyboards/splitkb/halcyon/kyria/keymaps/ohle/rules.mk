@@ -8,3 +8,6 @@ ENCODER_MAP_ENABLE = yes
 USER_NAME := halcyon_modules
 
 SRC += graphics/fonts/unifont_80.qff.c
+
+UNICODE_COMMON = yes
+UNICODEMAP_ENABLE = yes

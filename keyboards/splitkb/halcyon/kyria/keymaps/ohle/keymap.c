@@ -118,6 +118,118 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 #endif
 // clang-format on
 
+enum custom_keycodes {
+    AE = QK_KB_0, OE, UE,
+    SZET,
+    RIGHT, LEFT, UP, DOWN,
+    COPYRIGHT,
+    EN_DASH, EM_DASH, ELLIPSIS,
+    EURO,
+    CHECK,
+    MU, PI,
+    SQUARED, CUBED
+};
+
+enum unicode_names {
+    AE_LOWER_U, AE_UPPER_U, OE_LOWER_U, OE_UPPER_U, UE_LOWER_U, UE_UPPER_U,
+    SZET_U,
+    RIGHT_U, LEFT_U, UP_U, DOWN_U,
+    COPYRIGHT_U,
+    EN_DASH_U, EM_DASH_U, ELLIPSIS_U,
+    EURO_U,
+    CHECK_U,
+    MU_U, PI_U,
+    SQUARED_U, CUBED_U
+};
+
+const uint32_t PROGMEM unicode_map[] = {
+    [AE_LOWER_U]  = 0x00e4,
+    [AE_UPPER_U]  = 0x00c4,
+    [OE_LOWER_U]  = 0x00f6,
+    [OE_UPPER_U]  = 0x00d6,
+    [UE_LOWER_U]  = 0x00fc,
+    [UE_UPPER_U]  = 0x00dc,
+    [SZET_U]      = 0x00df,
+    [RIGHT_U]     = 0x2192,
+    [LEFT_U]      = 0x2190,
+    [UP_U]        = 0x2191,
+    [DOWN_U]      = 0x2193,
+    [COPYRIGHT_U] = 0x00a9,
+    [EN_DASH_U]   = 0x2013,
+    [EM_DASH_U]   = 0x2014,
+    [ELLIPSIS_U]  = 0x2026,
+    [EURO_U]      = 0x20ac,
+    [CHECK_U]     = 0x2713,
+    [MU_U]        = 0x03bc,
+    [PI_U]        = 0x03c0,
+    [SQUARED_U]   = 0x00b2,
+    [CUBED_U]     = 0x00b3,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        bool shifted = (get_mods() | get_oneshot_mods() | get_weak_mods()) & MOD_MASK_SHIFT;
+
+        switch (keycode) {
+            case AE:
+                register_unicodemap(shifted ? AE_UPPER_U : AE_LOWER_U);
+                return false;
+            case OE:
+                register_unicodemap(shifted ? OE_UPPER_U : OE_LOWER_U);
+                return false;
+            case UE:
+                register_unicodemap(shifted ? UE_UPPER_U : UE_LOWER_U);
+                return false;
+            case SZET:
+                register_unicodemap(SZET_U);
+                return false;
+            case RIGHT:
+                register_unicodemap(RIGHT_U);
+                return false;
+            case LEFT:
+                register_unicodemap(LEFT_U);
+                return false;
+            case UP:
+                register_unicodemap(UP_U);
+                return false;
+            case DOWN:
+                register_unicodemap(DOWN_U);
+                return false;
+            case COPYRIGHT:
+                register_unicodemap(COPYRIGHT_U);
+                return false;
+            case EN_DASH:
+                register_unicodemap(EN_DASH_U);
+                return false;
+            case EM_DASH:
+                register_unicodemap(EM_DASH_U);
+                return false;
+            case ELLIPSIS:
+                register_unicodemap(ELLIPSIS_U);
+                return false;
+            case EURO:
+                register_unicodemap(EURO_U);
+                return false;
+            case CHECK:
+                register_unicodemap(CHECK_U);
+                return false;
+            case MU:
+                register_unicodemap(MU_U);
+                return false;
+            case PI:
+                register_unicodemap(PI_U);
+                return false;
+            case SQUARED:
+                register_unicodemap(SQUARED_U);
+                return false;
+            case CUBED:
+                register_unicodemap(CUBED_U);
+                return false;
+        }
+    }
+    return true;
+}
+
 // Solarized palette: layer 0 = off, layers 1-5 = blue/cyan/orange/green/violet
 static const uint8_t PROGMEM layer_colors[][3] = {
     {  0,   0,   0},  // layer 0: off
@@ -204,7 +316,7 @@ bool display_module_housekeeping_task_user(bool second_display) {
     // Move surface to lcd
     qp_surface_draw(lcd_surface, lcd, 0, 0, 0);
     qp_flush(lcd);
-    
+
     // Return false on the main display so the module's default numeric layer
     // renderer does not run and overwrite these custom glyphs.
     return second_display;

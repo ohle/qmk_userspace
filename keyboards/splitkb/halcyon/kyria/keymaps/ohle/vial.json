@@ -52,5 +52,25 @@
             [{"x":-0.5},"8,5"],
             [{"r":-15,"y":-1,"x":-0.5},"8,1"]
         ]
-    }
+    },
+    "customKeycodes": [
+        {"name": "AE", "title": "ä Ä", "shortName": "äÄ"},
+        {"name": "OE", "title": "ö Ö", "shortName": "öÖ"},
+        {"name": "UE", "title": "ü Ü", "shortName": "üÜ"},
+        {"name": "SZET", "title": "ß", "shortName": "ß"},
+        {"name": "RIGHT", "title": "→", "shortName": "→"},
+        {"name": "LEFT", "title": "←", "shortName": "←"},
+        {"name": "UP", "title": "↑", "shortName": "↑"},
+        {"name": "DOWN", "title": "↓", "shortName": "↓"},
+        {"name": "COPYRIGHT", "title": "©", "shortName": "©"},
+        {"name": "EN_DASH", "title": "–", "shortName": "–"},
+        {"name": "EM_DASH", "title": "—", "shortName": "—"},
+        {"name": "ELLIPSIS", "title": "…", "shortName": "…"},
+        {"name": "EURO", "title": "€", "shortName": "€"},
+        {"name": "CHECK", "title": "✓", "shortName": "✓"},
+        {"name": "MU", "title": "µ", "shortName": "µ"},
+        {"name": "PI", "title": "π", "shortName": "π"},
+        {"name": "SQUARED", "title": "²", "shortName": "²"},
+        {"name": "CUBED", "title": "³", "shortName": "³"}
+    ]
 }
